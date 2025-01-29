@@ -1,3 +1,5 @@
+import org.gradle.internal.impldep.bsh.commands.dir
+
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -32,6 +34,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.paging.guava)
+    implementation(libs.paging.runtime)
 
     implementation(libs.appcompat)
     implementation(libs.material)

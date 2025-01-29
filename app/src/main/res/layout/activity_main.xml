@@ -27,5 +27,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragContainer" />
+        app:layout_constraintTop_toBottomOf="@+id/fragContainer"
+        app:menu="@menu/botton_nav_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>
