@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import java.util.List;
 import java.util.ArrayList;
+import android.Manifest;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -39,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
                         setFragment(gridViewFragment);
                         break;
                     case R.id.listViewOp:
-                        ListViewFragment listViewFragment =
-                                ListViewFragment.newInstance();
+                        ListViewFragment listViewFragment = ListViewFragment.newInstance();
                         setFragment(listViewFragment);
                         break;
                 }
