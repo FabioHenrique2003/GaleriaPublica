@@ -16,59 +16,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ListViewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ListViewFragment extends Fragment {
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private MainViewModel mViewModel;
     private View view;
 
-    public static ListViewFragment ListViewFragment() {
+    // Criação de uma nova instância do fragmento.
+    public static ListViewFragment newInstance() {
         return new ListViewFragment();
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ListViewFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ListViewFragment newInstance(String param1, String param2) {
-        ListViewFragment fragment = new ListViewFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        // Infla o layout "fragment_list_view" e retorna a View resultante.
         view = inflater.inflate(R.layout.fragment_list_view, container, false);
         return view;
     }
@@ -76,18 +38,30 @@ public class ListViewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
-        ListAdapter listAdapter = new ListAdapter(new ImageDataComparator());
-        LiveData<PagingData<ImageData>> liveData = mViewModel.getPageLv();
-        liveData.observe(getViewLifecycleOwner(), new Observer<PagingData<ImageData>>() {
 
+        // Inicializa o ViewModel obtendo-o a partir da Activity que contém o fragmento.
+        mViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
+
+        // Instancia o adaptador responsável por exibir os itens na lista, utilizando um comparador para diferenciação eficiente dos elementos.
+        ListAdapter listAdapter = new ListAdapter(new ImageDataComparator());
+
+        // Obtém o LiveData que contém os dados paginados do ViewModel.
+        LiveData<PagingData<ImageData>> liveData = mViewModel.getPageLv();
+
+        // Adiciona um observador ao LiveData para atualizar a lista sempre que os dados forem modificados.
+        liveData.observe(getViewLifecycleOwner(), new Observer<PagingData<ImageData>>() {
             @Override
             public void onChanged(PagingData<ImageData> objectPagingData) {
-                        listAdapter.submitData(getViewLifecycleOwner().getLifecycle(),objectPagingData);
-                        }
+                // Envia os novos dados ao adaptador, garantindo que a atualização ocorra dentro do ciclo de vida do fragmento.
+                listAdapter.submitData(getViewLifecycleOwner().getLifecycle(), objectPagingData);
+            }
         });
-        RecyclerView rvGallery = (RecyclerView) view.findViewById(R.id.rv_list);
+
+        // Localiza o RecyclerView no layout e associa o adaptador.
+        RecyclerView rvGallery = (RecyclerView) view.findViewById(R.id.rvList);
         rvGallery.setAdapter(listAdapter);
+
+        // Define o layout do RecyclerView como LinearLayoutManager, organizando os itens em uma lista vertical.
         rvGallery.setLayoutManager(new LinearLayoutManager(getContext()));
-        }
     }
+}
